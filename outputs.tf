@@ -47,6 +47,15 @@ output "info" {
     tecnologias = ["Terraform", "Docker", "GitHub Actions"]
   })
 }
+output "debug" {
+  value = {
+    path_root    = path.root
+    path_module  = path.module
+    path_cwd     = path.cwd
+    abspath_root = abspath(path.root)
+    abspath_html = "${abspath(path.root)}/html"
+  }
+}
 output "nginx_url" {
   description = "URL para acceder a nginx"
   value       = "http://localhost:${var.nginx_port}"

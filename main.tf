@@ -72,10 +72,15 @@ resource "docker_container" "nginx" {
     external = var.nginx_port # Puerto en tu portátil (variables.tf)
   }
 
+  volumes {
+    host_path      = "${abspath(path.root)}/html"
+    container_path = "/usr/share/nginx/html"
+  }
   networks_advanced {
     name = docker_network.app_network.name # Conecta a la red interna
   }
 }
+
 
 # ============================================================
 # CONTENEDOR POSTGRES
