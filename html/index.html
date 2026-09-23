@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resumen — Terraform Docker Lab</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #e2e8f0;
+            line-height: 1.6;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #3b82f6;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.25rem 0.75rem;
+            border-radius: 999px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(90deg, #60a5fa, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            color: #94a3b8;
+            font-size: 1.05rem;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 2.5rem 0 1rem;
+            color: #f1f5f9;
+            border-bottom: 2px solid #334155;
+            padding-bottom: 0.5rem;
+        }
+
+        h2 .num {
+            display: inline-block;
+            background: #3b82f6;
+            color: white;
+            font-size: 0.9rem;
+            width: 28px;
+            height: 28px;
+            line-height: 28px;
+            text-align: center;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+        }
+
+        h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 1.5rem 0 0.75rem;
+            color: #cbd5e1;
+        }
+
+        p {
+            color: #cbd5e1;
+            margin-bottom: 1rem;
+        }
+
+        .step {
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid #334155;
+            border-radius: 10px;
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .step .desc {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            margin-bottom: 0.75rem;
+        }
+
+        pre {
+            background: #0f172a;
+            border: 1px solid #1e293b;
+            border-left: 3px solid #3b82f6;
+            border-radius: 6px;
+            padding: 1rem;
+            overflow-x: auto;
+            font-family: "SF Mono", Monaco, Consolas, monospace;
+            font-size: 0.85rem;
+            color: #e2e8f0;
+            margin-bottom: 0.5rem;
+        }
+
+        pre .comment {
+            color: #64748b;
+        }
+
+        pre .cmd {
+            color: #60a5fa;
+        }
+
+        code {
+            background: rgba(51, 65, 85, 0.5);
+            padding: 0.125rem 0.4rem;
+            border-radius: 4px;
+            font-family: "SF Mono", Monaco, Consolas, monospace;
+            font-size: 0.875em;
+            color: #a78bfa;
+        }
+
+        ul {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+            color: #cbd5e1;
+        }
+
+        li {
+            margin-bottom: 0.4rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+
+        th, td {
+            padding: 0.6rem 0.8rem;
+            text-align: left;
+            border-bottom: 1px solid #334155;
+        }
+
+        th {
+            color: #94a3b8;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+        }
+
+        td {
+            color: #e2e8f0;
+        }
+
+        td code {
+            color: #60a5fa;
+        }
+
+        .note {
+            background: rgba(59, 130, 246, 0.1);
+            border-left: 3px solid #3b82f6;
+            padding: 0.75rem 1rem;
+            border-radius: 6px;
+            color: #cbd5e1;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .warn {
+            background: rgba(234, 179, 8, 0.1);
+            border-left: 3px solid #eab308;
+            padding: 0.75rem 1rem;
+            border-radius: 6px;
+            color: #fde68a;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid #334155;
+            color: #64748b;
+            font-size: 0.875rem;
+        }
+
+        footer a {
+            color: #60a5fa;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <header>
+            <span class="badge">Resumen del proyecto</span>
+            <h1>Terraform Docker Lab</h1>
+            <p class="subtitle">Todo lo que hicimos, paso a paso, con los comandos explicados.</p>
+        </header>
+
+        <!-- ============================================== -->
+        <h2><span class="num">1</span>Preparación del entorno</h2>
+
+        <div class="step">
+            <div class="desc">Comprobar versiones de Terraform y Docker dentro de WSL.</div>
+            <pre><span class="cmd">terraform version</span>
+<span class="cmd">docker --version</span>
+<span class="cmd">docker ps</span></pre>
+        </div>
+
+        <div class="step">
+            <div class="desc">Instalar Terraform en Ubuntu/WSL (una sola vez).</div>
+            <pre><span class="comment"># Añadir la clave GPG de HashiCorp</span>
+<span class="cmd">curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg</span>
+
+<span class="comment"># Añadir el repositorio</span>
+<span class="cmd">echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list</span>
+
+<span class="comment"># Instalar</span>
+<span class="cmd">sudo apt update</span>
+<span class="cmd">sudo apt install -y terraform</span></pre>
+        </div>
+
+        <div class="step">
+            <div class="desc">Arreglar permisos de Docker en WSL (para no usar sudo).</div>
+            <pre><span class="cmd">sudo usermod -aG docker $USER</span>
+<span class="comment"># Salir de WSL y volver a entrar para aplicar el cambio</span>
+<span class="cmd">exit</span>
+<span class="cmd">wsl</span></pre>
+        </div>
+
+        <!-- ============================================== -->
+        <h2><span class="num">2</span>Estructura del proyecto</h2>
+
+        <div class="step">
+            <div class="desc">Crear los archivos del proyecto.</div>
+            <pre><span class="cmd">mkdir -p terraform-docker-lab</span>
+<span class="cmd">cd terraform-docker-lab</span>
+<span class="cmd">mkdir -p .github/workflows html</span>
+<span class="cmd">touch main.tf variables.tf terraform.tfvars outputs.tf .gitignore README.md</span>
+<span class="cmd">touch .github/workflows/terraform.yml</span></pre>
+        </div>
+
+        <table>
+            <thead>
+                <tr><th>Archivo</th><th>Para qué sirve</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><code>main.tf</code></td><td>Recursos: imágenes, red, volumen y contenedores</td></tr>
+                <tr><td><code>variables.tf</code></td><td>Declaración de variables</td></tr>
+                <tr><td><code>terraform.tfvars</code></td><td>Valores reales (no se sube a Git)</td></tr>
+                <tr><td><code>outputs.tf</code></td><td>URLs y datos al terminar el apply</td></tr>
+                <tr><td><code>.gitignore</code></td><td>Qué no subir a Git</td></tr>
+                <tr><td><code>README.md</code></td><td>Documentación del proyecto</td></tr>
+                <tr><td><code>.github/workflows/terraform.yml</code></td><td>CI: valida en cada push</td></tr>
+                <tr><td><code>html/index.html</code></td><td>Página servida por nginx</td></tr>
+            </tbody>
+        </table>
+
+        <!-- ============================================== -->
+        <h2><span class="num">3</span>Flujo de Terraform</h2>
+
+        <div class="step">
+            <div class="desc">Inicializar el proyecto: descarga el provider de Docker.</div>
+            <pre><span class="cmd">terraform init</span></pre>
+        </div>
+
+        <div class="step">
+            <div class="desc">Formatear los archivos con el estilo oficial.</div>
+            <pre><span class="cmd">terraform fmt</span></pre>
+        </div>
+
+        <div class="step">
+            <div class="desc">Validar la sintaxis sin tocar nada.</div>
+            <pre><span class="cmd">terraform validate</span></pre>
+        </div>
+
+        <div class="step">
+            <div class="desc">Previsualizar qué va a hacer (no toca Docker).</div>
+            <pre><span class="cmd">terraform plan</span></pre>
+        </div>
+
+        <div class="step">
+            <div class="desc">Aplicar los cambios: crea imágenes, red, volumen y contenedores.</div>
+            <pre><span class="cmd">terraform apply</span></pre>
+        </div>
+
+        <div class="step">
+            <div class="desc">Ver los outputs definidos en <code>outputs.tf</code>.</div>
+            <pre><span class="cmd">terraform output</span></pre>
+        </div>
+
+        <div class="step">
+            <div class="desc">Listar los recursos que Terraform gestiona.</div>
+            <pre><span class="cmd">terraform state list</span></pre>
+        </div>
+
+        <div class="step">
+            <div class="desc">Destruir todo lo creado (cuando quieras limpiar).</div>
+            <pre><span class="cmd">terraform destroy</span></pre>
+        </div>
+
+        <!-- ============================================== -->
+        <h2><span class="num">4</span>Comandos de Docker</h2>
+
+        <table>
+            <thead>
+                <tr><th>Comando</th><th>Qué hace</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><code>docker ps</code></td><td>Lista contenedores en ejecución</td></tr>
+                <tr><td><code>docker images</code></td><td>Lista imágenes descargadas</td></tr>
+                <tr><td><code>docker exec web cat /usr/share/nginx/html/index.html</code></td><td>Ver el HTML servido por nginx</td></tr>
+                <tr><td><code>docker exec -it web sh</code></td><td>Entrar al contenedor nginx</td></tr>
+                <tr><td><code>docker exec -it db psql -U admin -d appdb</code></td><td>Entrar a Postgres por consola</td></tr>
+                <tr><td><code>docker logs web</code></td><td>Ver logs del contenedor</td></tr>
+                <tr><td><code>docker inspect web</code></td><td>Ver toda la configuración del contenedor</td></tr>
+                <tr><td><code>docker inspect web | grep -A 5 Mounts</code></td><td>Ver volúmenes montados</td></tr>
+            </tbody>
+        </table>
+
+        <!-- ============================================== -->
+        <h2><span class="num">5</span>El volumen del HTML</h2>
+
+        <div class="step">
+            <div class="desc">En <code>main.tf</code>, dentro del contenedor nginx:</div>
+            <pre>volumes {
+  host_path      = "${abspath(path.root)}/html"
+  container_path = "/usr/share/nginx/html"
+}</pre>
+        </div>
+
+        <div class="note">
+            <strong>${abspath(path.root)}</strong> convierte la ruta relativa del proyecto en absoluta.
+            Es lo que Docker necesita para el <em>bind mount</em>.
+        </div>
+
+        <div class="warn">
+            <strong>Ojo:</strong> si borras <code>html/index.html</code>, nginx devuelve 403/404.
+            El contenedor sigue vivo. Vuelve a crearlo o haz <code>git checkout html/</code>.
+        </div>
+
+        <!-- ============================================== -->
+        <h2><span class="num">6</span>Git y GitHub</h2>
+
+        <div class="step">
+            <div class="desc">Configurar identidad y subir el proyecto.</div>
+            <pre><span class="cmd">git config --global user.name "vramosr1986-gif"</span>
+<span class="cmd">git config --global user.email "vramosr1986@gmail.com"</span>
+
+<span class="cmd">git init</span>
+<span class="cmd">git add .</span>
+<span class="cmd">git commit -m "Initial commit: Terraform Docker lab"</span>
+<span class="cmd">git branch -M main</span>
+<span class="cmd">git remote add origin https://github.com/vramosr1986-gif/terraform-docker-lab.git</span>
+<span class="cmd">git push -u origin main</span></pre>
+        </div>
+
+        <div class="step">
+            <div class="desc">Autenticación cómoda con GitHub CLI.</div>
+            <pre><span class="cmd">sudo apt install gh -y</span>
+<span class="cmd">gh auth login</span>
+<span class="comment"># Elegir: GitHub.com → HTTPS → Yes → Login with a web browser</span></pre>
+        </div>
+
+        <div class="note">
+            <strong>Recuerda:</strong> <code>terraform.tfvars</code> y <code>terraform.tfstate</code>
+            <strong>NO</strong> se suben a Git. Están en <code>.gitignore</code>.
+        </div>
+
+        <!-- ============================================== -->
+        <h2><span class="num">7</span>CI con GitHub Actions</h2>
+
+        <div class="step">
+            <div class="desc">En cada push o PR, GitHub ejecuta:</div>
+            <pre>terraform init
+terraform fmt -check -recursive
+terraform validate</pre>
+        </div>
+
+        <p>Si el workflow sale en verde ✅, todo está correcto. Si sale en rojo ❌, hay un error de formato o sintaxis.</p>
+
+        <!-- ============================================== -->
+        <h2><span class="num">8</span>Servicios finales</h2>
+
+        <table>
+            <thead>
+                <tr><th>Servicio</th><th>URL</th><th>Acceso</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>nginx (web)</td><td><code>http://localhost:8080</code></td><td>Público</td></tr>
+                <tr><td>Adminer</td><td><code>http://localhost:8081</code></td><td>Público</td></tr>
+                <tr><td>Postgres</td><td>—</td><td>Solo interno (red <code>app-network</code>)</td></tr>
+            </tbody>
+        </table>
+
+        <div class="step">
+            <div class="desc">Credenciales de Postgres (para Adminer):</div>
+            <pre>System:   PostgreSQL
+Server:   db
+Username: admin
+Password: admin123
+Database: appdb</pre>
+        </div>
+
+        <!-- ============================================== -->
+        <h2><span class="num">9</span>Comandos de emergencia</h2>
+
+        <table>
+            <thead>
+                <tr><th>Problema</th><th>Solución</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>Docker no responde</td><td><code>sudo service docker start</code></td></tr>
+                <tr><td>Permiso denegado en docker</td><td><code>exit</code> y volver a <code>wsl</code></td></tr>
+                <tr><td>Puerto 8080 ocupado</td><td>Cambiar <code>nginx_port</code> en <code>terraform.tfvars</code></td></tr>
+                <tr><td>Estado corrupto</td><td><code>terraform destroy</code> y <code>terraform apply</code></td></tr>
+                <tr><td>HTML roto</td><td><code>git checkout html/</code></td></tr>
+                <tr><td>Ver recursos actuales</td><td><code>terraform state list</code></td></tr>
+            </tbody>
+        </table>
+
+        <footer>
+            Desplegado por <a href="https://github.com/vramosr1986-gif" target="_blank">vramosr1986-gif</a>
+            · Terraform · Docker · GitHub Actions
+        </footer>
+
+    </div>
+</body>
+</html>
