@@ -35,6 +35,8 @@ graph LR
     Nginx -->|lee| HTML[html/index.html]
 
     terraform-docker-lab/
+
+
 ├── .github/
 │   └── workflows/
 │       └── terraform.yml       # CI: valida en cada push
@@ -46,7 +48,6 @@ graph LR
 ├── terraform.tfvars            # Valores (NO se sube a Git)
 ├── outputs.tf                  # URLs y datos al aplicar
 └── README.md
-
 # Docker
 sudo apt update && sudo apt install -y docker.io
 sudo usermod -aG docker $USER
