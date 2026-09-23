@@ -6,8 +6,8 @@
 terraform {
   required_providers {
     docker = {
-      source  = "kreuzwerker/docker"   # Provider para gestionar Docker
-      version = "~> 3.0"               # Cualquier versión 3.x (no 4.x)
+      source  = "kreuzwerker/docker" # Provider para gestionar Docker
+      version = "~> 3.0"             # Cualquier versión 3.x (no 4.x)
     }
   }
 }
@@ -27,17 +27,17 @@ provider "docker" {}
 # keep_locally = true evita que se borren al hacer "terraform destroy".
 # ============================================================
 resource "docker_image" "nginx" {
-  name         = "nginx:1.25-alpine"   # Imagen oficial de nginx, ligera
-  keep_locally = true                  # No borrar la imagen al destruir
+  name         = "nginx:1.25-alpine" # Imagen oficial de nginx, ligera
+  keep_locally = true                # No borrar la imagen al destruir
 }
 
 resource "docker_image" "postgres" {
-  name         = "postgres:15"         # Imagen oficial de PostgreSQL 15
+  name         = "postgres:15" # Imagen oficial de PostgreSQL 15
   keep_locally = true
 }
 
 resource "docker_image" "adminer" {
-  name         = "adminer:latest"      # Interfaz web para gestionar bases de datos
+  name         = "adminer:latest" # Interfaz web para gestionar bases de datos
   keep_locally = true
 }
 
@@ -64,16 +64,16 @@ resource "docker_volume" "postgres_data" {
 # Servidor web accesible desde http://localhost:8080
 # ============================================================
 resource "docker_container" "nginx" {
-  name  = "web"                        # Nombre del contenedor en Docker
-  image = docker_image.nginx.image_id  # Usa la imagen descargada arriba
+  name  = "web"                       # Nombre del contenedor en Docker
+  image = docker_image.nginx.image_id # Usa la imagen descargada arriba
 
   ports {
-    internal = 80                      # Puerto dentro del contenedor
-    external = var.nginx_port          # Puerto en tu portátil (variables.tf)
+    internal = 80             # Puerto dentro del contenedor
+    external = var.nginx_port # Puerto en tu portátil (variables.tf)
   }
 
   networks_advanced {
-    name = docker_network.app_network.name   # Conecta a la red interna
+    name = docker_network.app_network.name # Conecta a la red interna
   }
 }
 
@@ -88,9 +88,9 @@ resource "docker_container" "postgres" {
 
   # Variables de entorno que Postgres usa al arrancar por primera vez
   env = [
-    "POSTGRES_USER=admin",                              # Usuario admin
-    "POSTGRES_PASSWORD=${var.postgres_password}",       # Password desde variables.tf
-    "POSTGRES_DB=appdb"                                 # Base de datos inicial
+    "POSTGRES_USER=admin",                        # Usuario admin
+    "POSTGRES_PASSWORD=${var.postgres_password}", # Password desde variables.tf
+    "POSTGRES_DB=appdb"                           # Base de datos inicial
   ]
 
   # Monta el volumen persistente donde Postgres guarda los datos
@@ -114,8 +114,8 @@ resource "docker_container" "adminer" {
   image = docker_image.adminer.image_id
 
   ports {
-    internal = 8080                    # Adminer escucha en 8080 dentro
-    external = 8081                    # Tú lo ves en 8081 (8080 lo usa nginx)
+    internal = 8080 # Adminer escucha en 8080 dentro
+    external = 8081 # Tú lo ves en 8081 (8080 lo usa nginx)
   }
 
   networks_advanced {
