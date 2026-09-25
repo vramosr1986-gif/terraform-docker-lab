@@ -6,34 +6,55 @@ on:
   pull_request:
 
 jobs:
-  deploy:
+  validate:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: hashicorp/setup-terraform@v3
+      - name: Descargar código
+        uses: actions/checkout@v4
+      - name: Instalar Terraform
+        uses: hashicorp/setup-terraform@v3
+      - name: Terraform Init
+        run: terraform init -backend=false
+      - name: Terraform Format
+        run: terraform fmt -check -recursive
+      - name: Terraform Validate
+        run: terraform validate
 
-      # 1. Asegurar que Docker está listo
-      - name: Start Docker
-        run: sudo systemctl start docker
-
-      # 2. Verificar que las imágenes existen en Docker Hub
-      - name: Check Docker Images
+  deploy-test:
+    needs: validate
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar código
+        uses: actions/checkout@v4
+      - name: Instalar Terraform
+        uses: hashicorp/setup-terraform@v3
+      - name: Arrancar Docker
         run: |
-          docker manifest inspect nginx:1.25-alpine > /dev/null || exit 1
-          docker manifest inspect postgres:15 > /dev/null || exit 1
-
-      # 3. Terraform Init & Apply (crea los contenedores)
-      - name: Terraform Apply
-        run: |
-          terraform init
-          terraform apply -auto-approve -input=false
+          sudo systemctl start docker
+          docker ps
+      - name: Terraform Init
+        run: terraform init
+      - name: Terraform Plan
         env:
           TF_VAR_nginx_port: 8080
           TF_VAR_postgres_password: ${{ secrets.POSTGRES_PASSWORD }}
-
-      # 4. Comprobar que los contenedores están corriendo
-      - name: Verify Containers
+        run: terraform plan -no-color -input=false
+      - name: Terraform Apply
+        env:
+          TF_VAR_nginx_port: 8080
+          TF_VAR_postgres_password: ${{ secrets.POSTGRES_PASSWORD }}
+        run: terraform apply -auto-approve -input=false
+      - name: Verificar contenedores
         run: |
-          sleep 5 # Dar tiempo a que arranquen
+          sleep 10
+          curl -f http://localhost:8080 || exit 1
           docker ps | grep web
           docker ps | grep db
+          docker ps | grep adminer
+      - name: Terraform Destroy
+        if: always()
+        env:
+          TF_VAR_nginx_port: 8080
+          TF_VAR_postgres_password: ${{ secrets.POSTGRES_PASSWORD }}
+        run: terraform destroy -auto-approve -input=false
