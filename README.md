@@ -1,5 +1,7 @@
 # Terraform Docker Lab
 
+\n![CI](https://github.com/vramosr1986-gif/terraform-docker-lab/actions/workflows/terraform.yml/badge.svg)
+
 Laboratorio local de **Infrastructure as Code** donde se despliega un stack de servicios con **Terraform** sobre **Docker**. Todo el proyecto está versionado en Git y validado con **GitHub Actions**.
 
 ![Terraform](https://img.shields.io/badge/Terraform-1.9-7B42BC?logo=terraform)
@@ -166,3 +168,8 @@ El workflow `.github/workflows/terraform.yml` se ejecuta en cada `push` y `pull_
 - `terraform fmt -check`
 - `terraform init -backend=false`
 - `terraform validate`
+
+# Terraform Docker Lab
+
+
+Laboratorio local de **Infrastructure as Code**...
