@@ -24,30 +24,15 @@ Laboratorio local de **Infrastructure as Code** donde se despliega un stack de s
 
 ## Arquitectura
 
-```text
-                         Navegador
-                             │
-              ┌──────────────┴──────────────┐
-              │                             │
-         :8080 │                        :8081 │
-              ▼                             ▼
-        ┌──────────┐                 ┌──────────┐
-        │  nginx   │                 │ adminer  │
-        │   web    │                 │          │
-        └────┬─────┘                 └────┬─────┘
-             │                            │
-             │ app-network                │ app-network
-             │                            │
-             └──────────────┬─────────────┘
-                            ▼
-                     ┌──────────┐
-                     │ postgres │
-                     │    db    │
-                     └────┬─────┘
-                          │
-                          ▼
-                    (postgres-data)
-                      volumen
+```mermaid
+graph LR
+    User[Navegador] -->|8080| Nginx[nginx<br/>contenedor web]
+    User -->|8081| Adminer[adminer<br/>contenedor adminer]
+    Adminer -->|5432| Postgres[postgres<br/>contenedor db]
+    Nginx -.->|app-network| Postgres
+    Adminer -.->|app-network| Postgres
+    Postgres -->|persiste| Volume[(postgres-data)]
+    Nginx -->|lee| HTML[html/index.html]
 ```
 
 ---
