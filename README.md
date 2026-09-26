@@ -179,9 +179,8 @@ El workflow `.github/workflows/terraform.yml` se ejecuta en cada `push` y `pull_
 
 ### Adminer conectado a Postgres
 
-![adminer](docs/screenshot-adminer-ps.jpeg)
+![adminer](docs/screenshot-adminer.jpeg)
 
 ### Contenedores corriendo
 
 ![docker ps](docs/screenshot-docker-ps.jpeg)
-
