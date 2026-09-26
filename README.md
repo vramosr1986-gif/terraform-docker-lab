@@ -169,3 +169,18 @@ El workflow `.github/workflows/terraform.yml` se ejecuta en cada `push` y `pull_
 - `terraform init -backend=false`
 - `terraform validate`
 
+---
+
+## Capturas
+
+### nginx sirviendo el HTML
+
+![nginx](docs/screenshot-nginx.jpeg)
+
+### Adminer conectado a Postgres
+
+![adminer](docs/screenshot-adminer.jpeg)
+
+### Contenedores corriendo
+
+![docker ps](docs/screenshot-docker-ps.jpeg)
